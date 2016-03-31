@@ -4,7 +4,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := libvorbis
 LOCAL_CFLAGS += -I$(LOCAL_PATH)/../include
-LOCAL_SHARED_LIBRARIES := libogg
 
 LOCAL_SRC_FILES := \
 	$(addprefix ../, $(shell cd $(LOCAL_PATH)/../; \
