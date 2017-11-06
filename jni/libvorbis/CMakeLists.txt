@@ -57,6 +57,10 @@ set(VORBISENC_SOURCES
     vorbisenc.c
 )
 
+if(WIN32)
+    list(APPEND VORBIS_SOURCES vorbisenc.c)
+endif()
+
 if(MSVC)
     list(APPEND VORBIS_SOURCES ../win32/vorbis.def)
     list(APPEND VORBISENC_SOURCES ../win32/vorbisenc.def)
@@ -80,8 +84,8 @@ if (NOT BUILD_FRAMEWORK)
     set_target_properties(vorbisfile PROPERTIES SOVERSION ${VORBISFILE_VERSION_INFO})
 
     target_link_libraries(vorbis ${OGG_LIBRARIES})
-    target_link_libraries(vorbisenc ${OGG_LIBRARIES})
-    target_link_libraries(vorbisfile ${OGG_LIBRARIES})
+    target_link_libraries(vorbisenc ${OGG_LIBRARIES} vorbis)
+    target_link_libraries(vorbisfile ${OGG_LIBRARIES} vorbis)
 
     install(FILES ${VORBIS_PUBLIC_HEADERS} DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}/vorbis)
 
