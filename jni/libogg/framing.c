@@ -19,6 +19,10 @@
 
  ********************************************************************/
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
@@ -722,8 +726,10 @@ long ogg_sync_pageseek(ogg_sync_state *oy,ogg_page *og){
       /* replace the computed checksum with the one actually read in */
       memcpy(page+22,chksum,4);
 
+#ifndef DISABLE_CRC
       /* Bad checksum. Lose sync */
       goto sync_fail;
+#endif
     }
   }
 
@@ -1813,6 +1819,7 @@ int main(void){
     test_pack(packets,headret,0,0,0);
   }
 
+#ifndef DISABLE_CRC
   {
     /* test for the libogg 1.1.1 resync in large continuation bug
        found by Josh Coalson)  */
@@ -1822,6 +1829,9 @@ int main(void){
     fprintf(stderr,"testing continuation resync in very large packets... ");
     test_pack(packets,headret,100,2,3);
   }
+#else
+    fprintf(stderr,"Skipping continuation resync test due to --disable-crc\n");
+#endif
 
   {
     /* term only page.  why not? */
@@ -2083,6 +2093,7 @@ int main(void){
       fprintf(stderr,"ok.\n");
     }
 
+#ifndef DISABLE_CRC
     /* Test recapture: page + garbage + page */
     {
       ogg_page og_de;
@@ -2124,6 +2135,9 @@ int main(void){
 
       fprintf(stderr,"ok.\n");
     }
+#else
+    fprintf(stderr,"Skipping recapture test due to --disable-crc\n");
+#endif
 
     /* Free page data that was previously copied */
     {
