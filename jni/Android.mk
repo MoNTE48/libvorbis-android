@@ -1,9 +1,14 @@
 LOCAL_PATH := $(call my-dir)
 
-LOCAL_C_INCLUDE := $(LOCAL_PATH)/include
+include $(CLEAR_VARS)
 
-include $(addprefix $(LOCAL_PATH)/, $(addsuffix /Android.mk, \
-	libvorbis \
-))
+LOCAL_MODULE := libvorbis
 
+LOCAL_CFLAGS += \
+	-I$(LOCAL_PATH)/include \
+	-I$(LOCAL_PATH)/libvorbis
 
+LOCAL_SRC_FILES := \
+	$(shell cd $(LOCAL_PATH); find -type f -name '*.c')
+
+include $(BUILD_STATIC_LIBRARY)
