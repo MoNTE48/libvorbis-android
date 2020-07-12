@@ -6,7 +6,7 @@
  * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
  *                                                                  *
  * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2015             *
- * by the Xiph.Org Foundation http://www.xiph.org/                  *
+ * by the Xiph.Org Foundation https://xiph.org/                     *
  *                                                                  *
  ********************************************************************
 
@@ -1964,6 +1964,7 @@ long ov_read_filter(OggVorbis_File *vf,char *buffer,int length,
   long samples;
 
   if(vf->ready_state<OPENED)return(OV_EINVAL);
+  if(word<=0)return(OV_EINVAL);
 
   while(1){
     if(vf->ready_state==INITSET){
@@ -1989,6 +1990,8 @@ long ov_read_filter(OggVorbis_File *vf,char *buffer,int length,
     long channels=ov_info(vf,-1)->channels;
     long bytespersample=word * channels;
     vorbis_fpu_control fpu;
+
+    if(channels<1||channels>255)return(OV_EINVAL);
     if(samples>length/bytespersample)samples=length/bytespersample;
 
     if(samples <= 0)
